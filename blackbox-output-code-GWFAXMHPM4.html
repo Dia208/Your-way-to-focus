@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comfy Study Planner</title>
+    <style>
+        /* --- COMFY COLOR PALETTE & VARIABLES --- */
+        :root {
+            --bg-color: #f7f5f0;       /* Warm Off-White */
+            --card-bg: #ffffff;        /* Pure White */
+            --primary: #8da399;        /* Sage Green (Calming) */
+            --primary-dark: #6b8278;
+            --accent: #e8cfa9;        /* Muted Sand/Orange */
+            --text-main: #4a4a4a;      /* Dark Grey (Softer than black) */
+            --text-light: #888888;
+            --danger: #d48a8a;         /* Muted Red */
+            --radius: 16px;
+            --shadow: 0 10px 25px rgba(141, 163, 153, 0.15);
+        }
+
+        /* --- RESET & BASE STYLES --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media(min-width: 768px) {
+            .container { grid-template-columns: 350px 1fr; }
+        }
+
+        /* --- INPUT SECTION --- */
+        .input-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 5px; color: var(--primary-dark); }
+        p.subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--primary-dark); }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            background-color: #fafafa;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+        }
+
+        button.btn-add {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.btn-add:hover { background-color: var(--primary-dark); }
+
+        /* --- WEEKLY PLAN DISPLAY SECTION --- */
+        .schedule-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .clear-btn { color: var(--text-light); background: none; border: none; cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .day-block {
+            border-left: 4px solid var(--bg-color);
+            padding-left: 20px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .day-block::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+
+        .day-date { font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .day-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; }
+
+        /* Task Items inside the schedule */
+        .task-item {
+            background-color: #fdfcfb;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .task-item:hover { transform: translateX(5px); border-color: var(--accent); }
+
+        .task-info h3 { font-size: 1rem; margin-bottom: 4px; }
+        .task-tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
+        
+        /* Dynamic Tag Colors */
+        .tag-test { background-color: #ffebeb; color: var(--danger); }
+        .tag-assignment { background-color: #eef6ff; color: #7aa3d4; }
+        .tag-other { background-color: #fdf6e8; color: #d4a87a; }
+
+        .delete-task {
+            margin-left: 10px;
+            color: #ccc;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+        }
+        .delete-task:hover { color: var(--danger); }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            border: 2px dashed #eee;
+            border-radius: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
